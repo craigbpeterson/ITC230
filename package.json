@@ -1,0 +1,19 @@
+{
+  "name": "itc230",
+  "version": "1.0.0",
+  "description": "Advanced JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigbpeterson/ITC230.git"
+  },
+  "author": "Craig Peterson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/craigbpeterson/ITC230/issues"
+  },
+  "homepage": "https://github.com/craigbpeterson/ITC230#readme"
+}
