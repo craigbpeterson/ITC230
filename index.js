@@ -1,5 +1,7 @@
 var http = require('http');
 var fs = require('fs');
+var qs = require('querystring');
+var players = require('./lib/players.js');
 
 function serveStaticFile(res, path, contentType, responseCode) {
   if(!responseCode) {
@@ -17,13 +19,35 @@ function serveStaticFile(res, path, contentType, responseCode) {
 }
 
 http.createServer(function(req,res) {
-  var path = req.url.toLowerCase();
+  let url = req.url.split('?'); //separate route from query string
+  let params = qs.parse(url[1]); //convert query string to object
+  let path = url[0].toLowerCase();
   switch(path) {
     case '/':
       serveStaticFile(res, '/public/home.html', 'text/html');
       break;
     case '/about':
       serveStaticFile(res, '/public/about.html', 'text/html');
+      break;
+    case '/getall':
+      let playerList = players.getAll(); //get array of all players
+      let getAllMessage = (playerList.length !== 0) ? 'Entire Player List: \n' + JSON.stringify(playerList) : 'List is empty.';
+      res.writeHead(200, { 'Content-Type': 'text/plain' } );
+      res.end(getAllMessage);
+      break;
+    case '/get':
+      let found = players.get(params.number); //get player object
+      let getMessage = (found) ? JSON.stringify(found) : "Not found";
+      res.writeHead(200, { 'Content-Type': 'text/plain' } );
+      res.end('Results for ' + params.number + "\n" + getMessage);
+      break;
+    case '/delete':
+      let deletedPlayer = players.get(params.number); //get player object to be deleted
+      players.delete(params.number); //delete the player
+      let newPlayersList = players.getAll();
+      let deleteMessage = (deletedPlayer) ? 'Player Deleted: ' + JSON.stringify(deletedPlayer) + '\nTotal Players Remaining: ' + newPlayersList.length : 'Player not found. No players deleted.';
+      res.writeHead(200, { 'Content-Type': 'text/plain' } );
+      res.end(deleteMessage);
       break;
     default:
       res.writeHead(404, { 'Content-Type': 'text/plain' });
