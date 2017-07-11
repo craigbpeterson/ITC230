@@ -45,7 +45,7 @@ http.createServer(function(req,res) {
       let deletedPlayer = players.get(params.number); //get player object to be deleted
       players.delete(params.number); //delete the player
       let newPlayersList = players.getAll();
-      let deleteMessage = (deletedPlayer) ? 'Player Deleted: ' + JSON.stringify(deletedPlayer) + '\nTotal Players Remaining: ' + newPlayersList.length : 'Player not found. No players deleted.';
+      let deleteMessage = (deletedPlayer) ? 'Player Deleted: ' + JSON.stringify(deletedPlayer) + '\nTotal Players: ' + newPlayersList.length : 'Player not found. No players deleted. Total Players: ' + newPlayersList.length;
       res.writeHead(200, { 'Content-Type': 'text/plain' } );
       res.end(deleteMessage);
       break;
