@@ -44,10 +44,18 @@ http.createServer(function(req,res) {
     case '/delete':
       let deletedPlayer = players.get(params.number); //get player object to be deleted
       players.delete(params.number); //delete the player
-      let newPlayersList = players.getAll();
-      let deleteMessage = (deletedPlayer) ? 'Player Deleted: ' + JSON.stringify(deletedPlayer) + '\nTotal Players: ' + newPlayersList.length : 'Player not found. No players deleted. Total Players: ' + newPlayersList.length;
+      let deletedPlayersList = players.getAll();
+      let deleteMessage = (deletedPlayer) ? 'Player Deleted: ' + JSON.stringify(deletedPlayer) + '\nTotal Players: ' + deletedPlayersList.length : 'Player not found. No players deleted. Total Players: ' + deletedPlayersList.length;
       res.writeHead(200, { 'Content-Type': 'text/plain' } );
       res.end(deleteMessage);
+      break;
+    case '/add':
+      let playerDetails = params; //get player details to be added
+      players.add(playerDetails); //add the player
+      let addedPlayersList = players.getAll();
+      let addMessage = (playerDetails) ? 'Player Added: ' + JSON.stringify(playerDetails) + '\nTotal Players: ' + addedPlayersList.length : 'No player data entered. No player added. Total Players: ' + addedPlayersList.length;
+      res.writeHead(200, { 'Content-Type': 'text/plain' } );
+      res.end(addMessage);
       break;
     default:
       res.writeHead(404, { 'Content-Type': 'text/plain' });
