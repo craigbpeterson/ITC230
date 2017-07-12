@@ -1,3 +1,4 @@
+'use strict'
 var http = require('http');
 var fs = require('fs');
 var qs = require('querystring');
@@ -22,6 +23,7 @@ http.createServer(function(req,res) {
   let url = req.url.split('?'); //separate route from query string
   let params = qs.parse(url[1]); //convert query string to object
   let path = url[0].toLowerCase();
+  let playerList = [];
   switch(path) {
     case '/':
       serveStaticFile(res, '/public/home.html', 'text/html');
@@ -30,8 +32,8 @@ http.createServer(function(req,res) {
       serveStaticFile(res, '/public/about.html', 'text/html');
       break;
     case '/getall':
-      let playerList = players.getAll(); //get array of all players
-      let getAllMessage = (playerList.length !== 0) ? 'Entire Player List: \n' + JSON.stringify(playerList) : 'List is empty.';
+      playerList = players.getAll(); //get array of all players
+      let getAllMessage = (playerList.length !== 0) ? 'Total Players: ' + playerList.length + '\n\nEntire Player List: \n' + JSON.stringify(playerList) : 'List is empty.';
       res.writeHead(200, { 'Content-Type': 'text/plain' } );
       res.end(getAllMessage);
       break;
@@ -39,21 +41,21 @@ http.createServer(function(req,res) {
       let found = players.get(params.number); //get player object
       let getMessage = (found) ? JSON.stringify(found) : "Not found";
       res.writeHead(200, { 'Content-Type': 'text/plain' } );
-      res.end('Results for ' + params.number + "\n" + getMessage);
+      res.end('Results for Jersey Number ' + params.number + ":\n\n" + getMessage);
       break;
     case '/delete':
       let deletedPlayer = players.get(params.number); //get player object to be deleted
       players.delete(params.number); //delete the player
-      let deletedPlayersList = players.getAll();
-      let deleteMessage = (deletedPlayer) ? 'Player Deleted: ' + JSON.stringify(deletedPlayer) + '\nTotal Players: ' + deletedPlayersList.length : 'Player not found. No players deleted. Total Players: ' + deletedPlayersList.length;
+      playerList = players.getAll(); //get new array of all players
+      let deleteMessage = (deletedPlayer) ? 'Player Deleted: ' + JSON.stringify(deletedPlayer) + '\n\nTotal Players Remaining: ' + playerList.length : 'Player not found. No players deleted. Total Players: ' + playerList.length;
       res.writeHead(200, { 'Content-Type': 'text/plain' } );
       res.end(deleteMessage);
       break;
     case '/add':
       let playerDetails = params; //get player details to be added
-      players.add(playerDetails); //add the player
-      let addedPlayersList = players.getAll();
-      let addMessage = (playerDetails) ? 'Player Added: ' + JSON.stringify(playerDetails) + '\nTotal Players: ' + addedPlayersList.length : 'No player data entered. No player added. Total Players: ' + addedPlayersList.length;
+      if (playerDetails.number) { players.add(playerDetails); } //add the player if details were entered into the query string
+      playerList = players.getAll(); //get new array of all players
+      let addMessage = (playerDetails.number) ? 'Player Added: ' + JSON.stringify(playerDetails) + '\n\nNew Total Players: ' + playerList.length : 'No player number entered. No player added. Total Players Remains: ' + playerList.length;
       res.writeHead(200, { 'Content-Type': 'text/plain' } );
       res.end(addMessage);
       break;
