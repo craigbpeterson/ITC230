@@ -8,7 +8,16 @@
     <link rel="stylesheet" type="text/css" href="" />
 </head>
 <body>
-    <h1>Home</h1>
-    <p>Check out this super sweet test site.</p>
+    <a href="/">Back to HOME</a>
+    
+    {{#if playerDeleted}}
+    <h1>Deleted: {{playerDeleted.name}}</h1>
+    <p>Remaining total players: {{totalPlayers}}</p>
+    
+    {{else}}
+    <h1>Oops. Player with jersey number {{numberToDelete}} not found!</h1>
+    <p>No player deleted.</p>
+    {{/if}}
+    
 </body>
 </html>

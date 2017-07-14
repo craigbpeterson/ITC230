@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home | ITC230: Advanced JavaScript</title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="stylesheet" type="text/css" href="" />
+</head>
+<body>
+    <p><a href="/">Back to HOME</a></p>
+    
+    {{#if searchResult}}
+    <h1>Displaying search results for jersey number {{searchResult.number}}</h1>
+    <ul>
+        <li>Jersey Number: {{searchResult.number}}</li>
+        <li>Name: {{searchResult.name}}</li>
+        <li>Position: {{searchResult.position}}</li>
+        <li>Goals: {{searchResult.goals}}</li>
+        <li>Hometown: {{searchResult.hometown}}</li>
+    </ul>
+    
+    <p><a href="/delete?number={{searchResult.number}}">Delete {{searchResult.name}}</a></p>
+    
+    {{else}}
+    <h1>Oops. Player with jersey number {{playerNumber}} not found!</h1>
+    {{/if}}
+</body>
+
+</html>

@@ -1,67 +1,73 @@
 'use strict'
-var http = require('http');
-var fs = require('fs');
-var qs = require('querystring');
-var players = require('./lib/players.js');
+const express = require("express"); //load the express module
+const app = express(); //start the express module
 
-function serveStaticFile(res, path, contentType, responseCode) {
-  if(!responseCode) {
-    responseCode = 200;
-  }
-  fs.readFile(__dirname + path, function(err,data) {
-    if(err) {
-      res.writeHead(500, { 'Content-Type': 'text/plain' });
-    } else {
-      res.writeHead(responseCode,
-        { 'Content-Type': contentType });
-      res.end(data);
-    }
-  });
-}
+let players = require('./lib/players.js'); //load my players.js module (array of Sounders players)
 
-http.createServer(function(req,res) {
-  let url = req.url.split('?'); //separate route from query string
-  let params = qs.parse(url[1]); //convert query string to object
-  let path = url[0].toLowerCase();
-  let playerList = [];
-  switch(path) {
-    case '/':
-      serveStaticFile(res, '/public/home.html', 'text/html');
-      break;
-    case '/about':
-      serveStaticFile(res, '/public/about.html', 'text/html');
-      break;
-    case '/getall':
-      playerList = players.getAll(); //get array of all players
-      let getAllMessage = (playerList.length !== 0) ? 'Total Players: ' + playerList.length + '\n\nEntire Player List: \n' + JSON.stringify(playerList) : 'List is empty.';
-      res.writeHead(200, { 'Content-Type': 'text/plain' } );
-      res.end(getAllMessage);
-      break;
-    case '/get':
-      let found = players.get(params.number); //get player object
-      let getMessage = (found) ? JSON.stringify(found) : "Not found";
-      res.writeHead(200, { 'Content-Type': 'text/plain' } );
-      res.end('Results for Jersey Number ' + params.number + ":\n\n" + getMessage);
-      break;
-    case '/delete':
-      let deletedPlayer = players.get(params.number); //get player object to be deleted
-      players.delete(params.number); //delete the player
-      playerList = players.getAll(); //get new array of all players
-      let deleteMessage = (deletedPlayer) ? 'Player Deleted: ' + JSON.stringify(deletedPlayer) + '\n\nTotal Players Remaining: ' + playerList.length : 'Player not found. No players deleted. Total Players: ' + playerList.length;
-      res.writeHead(200, { 'Content-Type': 'text/plain' } );
-      res.end(deleteMessage);
-      break;
-    case '/add':
-      let playerDetails = params; //get player details to be added
-      if (playerDetails.number) { players.add(playerDetails); } //add the player if details were entered into the query string
-      playerList = players.getAll(); //get new array of all players
-      let addMessage = (playerDetails.number) ? 'Player Added: ' + JSON.stringify(playerDetails) + '\n\nNew Total Players: ' + playerList.length : 'No player number entered. No player added. Total Players Remains: ' + playerList.length;
-      res.writeHead(200, { 'Content-Type': 'text/plain' } );
-      res.end(addMessage);
-      break;
-    default:
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end('Not Found');
-      break;
-  }
-}).listen(process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000); //set the port for the server
+app.use(express.static(__dirname + '/public')); //set location for static files
+
+//load body-parser module and parse form submissions
+app.use(require("body-parser").urlencoded({extended: true}));
+
+//load express-handlebars view engine
+let handlebars =  require("express-handlebars"); 
+app.engine(".html", handlebars({extname: '.html'}));
+app.set("view engine", ".html");
+
+
+/* ============ */
+/* start routes */
+/* ============ */
+
+//home page
+app.get('/', function(req,res){
+    let allPlayers = players.getAll(); //get entire array of Sounders players
+    res.render('home', {allPlayers: allPlayers});
+});
+
+//about page
+app.get('/about', function(req,res) {
+    res.type('text/html');
+    res.sendFile(__dirname + '/public/about.html'); 
+});
+
+//details page - for search results
+app.post('/details', function(req,res) {
+    let playerNumber = req.body.number; //get number that was searched
+    let searchResult = players.get(playerNumber); //get player object
+    res.render('details', {searchResult: searchResult, playerNumber: playerNumber});
+});
+
+//details page - for clickable list items
+app.get('/details', function(req,res) {
+    let playerNumber = req.query.number; //get number that was searched
+    let searchResult = players.get(playerNumber); //get player object
+    res.render('details', {searchResult: searchResult, playerNumber: playerNumber});
+});
+
+//delete page
+app.get('/delete', function(req,res) {
+    let numberToDelete = req.query.number;
+    let playerDeleted = players.get(numberToDelete);
+    players.delete(numberToDelete); //delete player object
+    let totalPlayers = players.getAll().length; //get new total number of players
+    res.render('delete', {playerDeleted: playerDeleted, totalPlayers: totalPlayers, numberToDelete: numberToDelete});
+});
+
+// define 404 handler
+app.use(function(req,res) {
+    res.type('text/plain'); 
+    res.status(404);
+    res.send('404 - Not found');
+});
+
+/* ========== */
+/* end routes */
+/* ========== */
+
+
+//start the server
+app.listen(app.get('port'), function() {
+    console.log('Express started successfully! Wahoo!');
+});

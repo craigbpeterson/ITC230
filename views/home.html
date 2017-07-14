@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home | ITC230: Advanced JavaScript</title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="stylesheet" type="text/css" href="" />
+</head>
+<body>
+    <h1>Home</h1>
+    <form method="post" action="/details">
+        <input type="text" name="number" placeholder="Jersey Number" required maxlength="2">
+        <button>Search</button>
+    </form>
+    
+    <h2>Complete List of Players</h2>
+    {{#each allPlayers}}
+    <h3><a href="/details?number={{number}}">{{name}}</a></h3>
+    <ul>
+        <li>Jersey Number: {{number}}</li>
+        <li>Position: {{position}}</li>
+        <li>Goals: {{goals}}</li>
+        <li>Hometown: {{hometown}}</li>
+    </ul>
+    {{/each}}
+</body>
+</html>
