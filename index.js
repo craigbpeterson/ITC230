@@ -55,6 +55,14 @@ app.get('/delete', function(req,res) {
     res.render('delete', {playerDeleted: playerDeleted, totalPlayers: totalPlayers, numberToDelete: numberToDelete});
 });
 
+//add page
+app.get('/add', function(req,res) {
+    let newPlayerDetails = req.query; //get new player details from user-entered query string
+    if (newPlayerDetails.number) { players.add(newPlayerDetails) } //add the player if details were entered
+    let totalPlayers = players.getAll().length; //get new total number of players
+    res.render('add', {newPlayerDetails, totalPlayers});
+});
+
 // define 404 handler
 app.use(function(req,res) {
     res.type('text/plain'); 

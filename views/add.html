@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home | ITC230: Advanced JavaScript</title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="stylesheet" type="text/css" href="" />
+</head>
+<body>
+    <a href="/">Back to HOME</a>
+    
+    {{#if newPlayerDetails}}
+    <h1>Player Added: {{newPlayerDetails.name}}</h1>
+    <p>New Total Players: {{totalPlayers}}</p>
+    
+    {{else}}
+    <h1>Oops. No player details entered.</h1>
+    <p>No player added.</p>
+    {{/if}}
+    
+</body>
+</html>
