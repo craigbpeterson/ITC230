@@ -1,5 +1,5 @@
-'use strict'
-const express = require("express"); //load the express module
+'use strict';
+const express = require('express'); //load the express module
 const app = express(); //start the express module
 
 let players = require('./lib/players.js'); //load my players.js module (array of Sounders players)
@@ -8,12 +8,12 @@ app.set('port', process.env.PORT || 3000); //set the port for the server
 app.use(express.static(__dirname + '/public')); //set location for static files
 
 //load body-parser module and parse form submissions
-app.use(require("body-parser").urlencoded({extended: true}));
+app.use(require('body-parser').urlencoded({extended: true}));
 
 //load express-handlebars view engine
-let handlebars =  require("express-handlebars"); 
-app.engine(".html", handlebars({extname: '.html'}));
-app.set("view engine", ".html");
+let handlebars =  require('express-handlebars'); 
+app.engine('.html', handlebars({extname: '.html'}));
+app.set('view engine', '.html');
 
 
 /* ============ */
@@ -23,7 +23,7 @@ app.set("view engine", ".html");
 //home page
 app.get('/', function(req,res){
     let allPlayers = players.getAll(); //get entire array of Sounders players
-    res.render('home', {allPlayers: allPlayers});
+    res.render('home', {allPlayers});
 });
 
 //about page
@@ -36,14 +36,14 @@ app.get('/about', function(req,res) {
 app.post('/details', function(req,res) {
     let playerNumber = req.body.number; //get number that was searched
     let searchResult = players.get(playerNumber); //get player object
-    res.render('details', {searchResult: searchResult, playerNumber: playerNumber});
+    res.render('details', {searchResult, playerNumber});
 });
 
 //details page - for clickable list items
 app.get('/details', function(req,res) {
     let playerNumber = req.query.number; //get number that was searched
     let searchResult = players.get(playerNumber); //get player object
-    res.render('details', {searchResult: searchResult, playerNumber: playerNumber});
+    res.render('details', {searchResult, playerNumber});
 });
 
 //delete page
@@ -52,15 +52,14 @@ app.get('/delete', function(req,res) {
     let playerDeleted = players.get(numberToDelete);
     players.delete(numberToDelete); //delete player object
     let totalPlayers = players.getAll().length; //get new total number of players
-    res.render('delete', {playerDeleted: playerDeleted, totalPlayers: totalPlayers, numberToDelete: numberToDelete});
+    res.render('delete', {playerDeleted, totalPlayers, numberToDelete});
 });
 
 //add page
 app.get('/add', function(req,res) {
     let newPlayerDetails = req.query; //get new player details from user-entered query string
-    if (newPlayerDetails.number) { players.add(newPlayerDetails) } //add the player if details were entered
-    let totalPlayers = players.getAll().length; //get new total number of players
-    res.render('add', {newPlayerDetails, totalPlayers});
+    let result = players.add(newPlayerDetails); //attempt to add player
+    res.render('add', {newPlayerDetails, added: result.added, newTotalPlayers: result.totalPlayers, playerExists: result.playerExists});
 });
 
 // define 404 handler

@@ -10,13 +10,18 @@
 <body>
     <a href="/">Back to HOME</a>
     
-    {{#if newPlayerDetails}}
+    {{#if added}}
     <h1>Player Added: {{newPlayerDetails.name}}</h1>
-    <p>New Total Players: {{totalPlayers}}</p>
+    <p>New Total Players: {{newTotalPlayers}}</p>
+   
+    {{else if playerExists}}
+    <h1>Oops. Jersey number {{newPlayerDetails.number}} already exists.</h1>
+    <p>No player was added.</p>
     
     {{else}}
     <h1>Oops. No player details entered.</h1>
-    <p>No player added.</p>
+    <p>No player was added.</p>
+    
     {{/if}}
     
 </body>
