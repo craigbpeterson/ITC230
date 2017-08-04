@@ -10,17 +10,17 @@
 <body>
     <p><a href="/">Back to HOME</a></p>
     
-    {{#if searchResult}}
-    <h1>Displaying search results for jersey number {{searchResult.number}}</h1>
+    {{#if player}}
+    <h1>Displaying search results for jersey number {{player.number}}</h1>
     <ul>
-        <li>Jersey Number: {{searchResult.number}}</li>
-        <li>Name: {{searchResult.name}}</li>
-        <li>Position: {{searchResult.position}}</li>
-        <li>Goals: {{searchResult.goals}}</li>
-        <li>Hometown: {{searchResult.hometown}}</li>
+        <li>Jersey Number: {{player.number}}</li>
+        <li>Name: {{player.name}}</li>
+        <li>Position: {{player.position}}</li>
+        <li>Goals: {{player.goals}}</li>
+        <li>Hometown: {{player.hometown}}</li>
     </ul>
     
-    <p><a href="/delete?number={{searchResult.number}}">Delete {{searchResult.name}}</a></p>
+    <p><a href="/delete?number={{player.number}}">Delete {{player.name}}</a></p>
     
     {{else}}
     <h1>Oops. Player with jersey number {{playerNumber}} not found!</h1>
