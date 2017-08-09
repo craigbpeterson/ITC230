@@ -7,10 +7,12 @@ let Player = require('./models/player'); //load the mongoDB model
 //configure Express app
 app.set('port', process.env.PORT || 3000); //set the port for the server
 app.use(express.static(__dirname + '/public')); //set location for static files
+app.use(require("body-parser").json()); //load body-parser module and parse JSON data
 app.use(require('body-parser').urlencoded({extended: true})); //load body-parser module and parse form submissions
 app.use((err, req, res, next) => {
     console.log(err);
 });
+app.use('/api', require('cors')()); // enable cross-origin resource sharing for api routes
 
 //load express-handlebars view engine
 let handlebars = require('express-handlebars');
@@ -111,6 +113,75 @@ app.get('/add', function(req, res, next) {
         }
     });
 });
+
+
+/* ========== */
+/* api routes */
+/* ========== */
+
+//api - get a single player
+app.get('/api/detail/:number', function(req, res, next) {
+    let playerNumber = req.params.number; //get number from request parameters object
+                                          //the :number notation in the URL adds the value
+                                          //to the parameters object
+    
+    //get player record from MongoDB
+    Player.findOne({number:playerNumber}, function(err, player) {
+       if (err) return next(err);
+       if (player) {
+           res.json(player);
+       } else {
+           res.status(404).send('404 - Not found');
+       }
+    });
+});
+
+//api - get all players
+app.get('/api/players', function(req, res, next) {
+    
+    //get entire array of Sounders players from MongoDB
+    Player.find(function(err, allPlayers) {
+        if (err) return next(err);
+        if (allPlayers) {
+            res.json(allPlayers);
+        } else {
+            res.status(404).send('404 - Not found');
+        }
+    });
+});
+
+//api - delete a player
+app.get('/api/delete/:number', function(req, res, next) {
+    let playerNumber = req.params.number; //get number from request parameters object
+    
+    //remove player if found
+    Player.findOneAndRemove({number:playerNumber}, function(err) {
+        if (err) {
+            res.json({"result":err});
+        } else {
+            res.json({"result":"deleted"});
+        }
+    });
+});
+
+//api - add a player
+app.post('/api/add', function(req, res, next) {
+    let newPlayer = {"number":req.body.number, "name":req.body.name, "position":req.body.position, "goals":req.body.goals, "hometown":req.body.hometown};
+    
+    //add player or update data if player already exists
+    Player.findOneAndUpdate({"number":req.body.number}, newPlayer, {upsert:true}, function(err, result) {
+        if (err) {
+            res.json({"result":err});
+        } else {
+            res.json({"result":"added/updated"});
+        }
+    });
+});
+
+
+/* ============== */
+/* end api routes */
+/* ============== */
 
 // define 404 handler
 app.use(function(req,res) {
