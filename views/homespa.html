@@ -177,8 +177,8 @@
                 );
             }
         });
-        //console.log(itemNodes);
         
+        //create function to check whether or not the search produced any results
         function checkItemNodes(itemNodes) {
             for (var i = 0; i < itemNodes.length; i++) {
                 if (itemNodes[i] !== undefined) {
@@ -188,8 +188,7 @@
             return false;
         }
         
-        let searchResults = checkItemNodes(itemNodes);
-        //console.log('searchResults: '+ searchResults);
+        let searchResults = checkItemNodes(itemNodes); //are there search results?
         
         if (searchResults === false) {
             return <p className="noresults">No results. Please try another search.</p>
