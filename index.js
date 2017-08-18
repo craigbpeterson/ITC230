@@ -7,17 +7,17 @@ let Player = require('./models/player'); //load the mongoDB model
 //configure Express app
 app.set('port', process.env.PORT || 3000); //set the port for the server
 app.use(express.static(__dirname + '/public')); //set location for static files
-app.use(require("body-parser").json()); //load body-parser module and parse JSON data
+app.use(require('body-parser').json()); //load body-parser module and parse JSON data
 app.use(require('body-parser').urlencoded({extended: true})); //load body-parser module and parse form submissions
 app.use((err, req, res, next) => {
-    console.log(err);
+    console.log(err); //display any express errors in the console
 });
 app.use('/api', require('cors')()); // enable cross-origin resource sharing for api routes
 
-//load express-handlebars view engine
-let handlebars = require('express-handlebars');
-app.engine('.html', handlebars({extname: '.html'}));
-app.set('view engine', '.html');
+//load express-handlebars template engine
+let handlebars = require('express-handlebars'); //load the handlebars npm
+app.engine('.html', handlebars({extname: '.html'})); //set the handlebars template file extension to .html
+app.set('view engine', '.html'); //set the express view file extension to .html
 
 
 /* ============ */
@@ -28,8 +28,9 @@ app.set('view engine', '.html');
 app.get('/', function(req, res, next) {
     //get entire array of Sounders players
     Player.find( function(err, allPlayers) {
+        //console.log(allPlayers);
         if (err) return next(err);
-        res.render('home', {allPlayers}); //send allPlayers array to home.html view
+        res.render('homespa', {allPlayers: JSON.stringify(allPlayers)}); //send allPlayers array to home_spa.html view
     });
 });
 
@@ -151,11 +152,11 @@ app.get('/api/players', function(req, res, next) {
 });
 
 //api - delete a player
-app.get('/api/delete/:number', function(req, res, next) {
-    let playerNumber = req.params.number; //get number from request parameters object
+app.get('/api/delete/:id', function(req, res, next) {
+    let playerID = req.params.id; //get id from request parameters object
     
     //remove player if found
-    Player.findOneAndRemove({number:playerNumber}, function(err) {
+    Player.findOneAndRemove({_id:playerID}, function(err) {
         if (err) {
             res.json({"result":err});
         } else {
@@ -166,16 +167,24 @@ app.get('/api/delete/:number', function(req, res, next) {
 
 //api - add a player
 app.post('/api/add', function(req, res, next) {
-    let newPlayer = {"number":req.body.number, "name":req.body.name, "position":req.body.position, "goals":req.body.goals, "hometown":req.body.hometown};
+    let newPlayerDetails = {"number":req.body.number, "name":req.body.name, "position":req.body.position, "goals":req.body.goals, "hometown":req.body.hometown, "userAdded":true};
     
     //add player or update data if player already exists
-    Player.findOneAndUpdate({"number":req.body.number}, newPlayer, {upsert:true}, function(err, result) {
-        if (err) {
-            res.json({"result":err});
-        } else {
-            res.json({"result":"added/updated"});
-        }
-    });
+    if (!req.body._id) { //create new MongoDB document
+        let newPlayer = new Player(newPlayerDetails);
+        newPlayer.save((err,savedNewPlayer) => {
+            if (err) return next(err);
+            //console.log('new player: ' + savedNewPlayer);
+            res.json({updated: 0, _id: savedNewPlayer._id});
+        });
+    } else { //update existing MongoDB document
+        newPlayerDetails = {"number":req.body.number, "name":req.body.name, "position":req.body.position, "goals":req.body.goals, "hometown":req.body.hometown};
+        Player.updateOne({_id: req.body._id}, newPlayerDetails, (err, result) => {
+           if (err) return next(err);
+           res.json({updated: result.modifiedCount}); //modifiedCount = 0 if new item was created
+        });                                           //modifiedCount = 1 if existing item was updated
+    }
+    
 });
 
 

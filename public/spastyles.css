@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #00dc00;
+    color: #003fa0;
+    padding: 1rem;
+}
+
+h1 {
+    margin:0;
+}
+
+header p {
+    margin:0;
+}
+
+#searchform {
+    padding: 1rem 1rem 1rem 1rem;
+    background-color: #003fa0;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+#searchform input {
+    font-size: 1rem;
+    padding: .5rem;
+    border-radius: 6px;
+    border: 0;
+}
+
+#item-list {
+    overflow: hidden;
+}
+
+#item-list .playercard {
+    float: left;
+    margin: .5rem;
+    padding: .5rem .5rem 0rem .5rem;
+    background-color: #fff;
+    text-align: center;
+    border: 2px solid #00dc00;
+    border-radius: 6px;
+}
+
+.playercard p {
+    margin: .5rem 0 .5rem 0;
+}
+
+#item-details {
+    padding: 1rem;
+    float: left;
+    background-color: #ccc;
+}
+
+#item-details h3 {
+    margin: 0;
+}
+
+#item-details p {
+    margin-top: 0;
+    font-size: .8rem;
+    font-style: italic;
+}
+
+#item-details input {
+    margin-bottom: 1em;
+    padding: .3em;
+    width: 90%;
+    font-size: 1rem;
+    border: 0;
+    border-radius: 6px;
+}
+
+#item-details button {
+    margin-right: 1em;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 0;
+    background-color: #00dc00;
+    padding: .5rem;
+}
+
+.noresults {
+    padding: 1rem 1rem 0 1rem;
+    margin: 0;
+    color: #d60000;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+@media all and (max-width:470px) {
+    #item-details {
+        float: none;
+    }
+    
+    #item-list {
+        float: left;
+    }
+}

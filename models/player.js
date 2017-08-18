@@ -15,7 +15,8 @@ var playerSchema = mongoose.Schema({
   name: { type: String, required: true },
   position: String,
   goals: String,
-  hometown: String
+  hometown: String,
+  userAdded: Boolean
 }); 
 
 module.exports = mongoose.model('Player', playerSchema);
