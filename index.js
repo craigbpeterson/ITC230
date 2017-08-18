@@ -167,7 +167,7 @@ app.get('/api/delete/:id', function(req, res, next) {
 
 //api - add a player
 app.post('/api/add', function(req, res, next) {
-    let newPlayerDetails = {"number":req.body.number, "name":req.body.name, "position":req.body.position, "goals":req.body.goals, "hometown":req.body.hometown, "userAdded":true};
+    let newPlayerDetails = {"number":req.body.number, "name":req.body.name, "position":req.body.position, "goals":req.body.goals, "hometown":req.body.hometown, "userAdded": true, "imgsrc":"images/defaultheadshot.jpg"};
     
     //add player or update data if player already exists
     if (!req.body._id) { //create new MongoDB document

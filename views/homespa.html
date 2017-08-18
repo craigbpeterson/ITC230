@@ -49,8 +49,7 @@
         
         // show item details
         showDetails(event) {
-            //console.log(event.target);
-            // event.target is list item clicked
+            //console.log(event.target); // event.target is list item clicked
             let editItem = this.state.items.find((item) => {
                 return item._id == event.target.id;
             });
@@ -145,6 +144,7 @@
                 <h1>{title}</h1>
                 <p>Craig Peterson</p>
                 <p>ITC230: Advanced JavaScript</p>
+                <p>React Single-Page App</p>
             </header>
         );
     }
@@ -165,10 +165,8 @@
         // return items that match search entry field, or all items if no entry
         const itemNodes = items.map((item) => {
             if (!filter || item.name.toLowerCase().includes(filter)) { 
-                let imgsrc = 'images/defaultheadshot.jpg';
-                if (item.userAdded === false) {
-                    imgsrc = 'images/' + item.number + '.jpg';
-                }
+                let imgsrc = "images/defaultheadshot.jpg";
+                if (item.userAdded === false) {imgsrc = 'images/' + item.number + '.jpg';}
                 return (
                     <div key={item._id} className="playercard">
                         <img src={imgsrc} id={item._id} onClick={show} />

@@ -5,8 +5,8 @@ body {
 }
 
 header {
-    background-color: #00dc00;
-    color: #003fa0;
+    background-color: #5d9741;
+    color: #142530;
     padding: 1rem;
 }
 
@@ -20,7 +20,7 @@ header p {
 
 #searchform {
     padding: 1rem 1rem 1rem 1rem;
-    background-color: #003fa0;
+    background-color: #005595;
     color: #fff;
     font-size: 1.2rem;
     font-weight: bold;
@@ -35,16 +35,17 @@ header p {
 
 #item-list {
     overflow: hidden;
+    max-width: 1060px;
 }
 
 #item-list .playercard {
     float: left;
     margin: .5rem;
     padding: .5rem .5rem 0rem .5rem;
-    background-color: #fff;
     text-align: center;
-    border: 2px solid #00dc00;
+    border: 2px solid #142530;
     border-radius: 6px;
+    background-color: #5d9741;
 }
 
 .playercard p {
@@ -55,6 +56,7 @@ header p {
     padding: 1rem;
     float: left;
     background-color: #ccc;
+    color: #142530;
 }
 
 #item-details h3 {
@@ -81,8 +83,9 @@ header p {
     font-size: 1rem;
     border-radius: 6px;
     border: 0;
-    background-color: #00dc00;
+    background-color: #5d9741;
     padding: .5rem;
+    color: #142530;
 }
 
 .noresults {
