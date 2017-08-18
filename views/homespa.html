@@ -199,13 +199,16 @@
         return (
             <div id="item-details">
                 <h3>Details:</h3>
-                <p>Click a headshot to see full details!</p>
+                <p>Click a headshot to view or edit full player details!</p>
+                <div className="headshotframe">
+                    <img className="headshot" src={props.item.imgsrc || "images/defaultheadshot.jpg"} />
+                </div>
                 <form onChange={props.change}>
-                    <label>Jersey Number:<br />
-                        <input type="text" name="number" placeholder="jersey number" value={props.item.number || ""} /><br />
-                    </label>
                     <label>Name:<br />
                         <input type="text" name="name" placeholder="name" value={props.item.name || ""} /><br />
+                    </label>
+                    <label>Jersey Number:<br />
+                        <input type="text" name="number" placeholder="jersey number" value={props.item.number || ""} /><br />
                     </label>
                     <label>Position:<br />
                         <input type="text" name="position" placeholder="position" value={props.item.position || ""} /><br />
@@ -219,7 +222,7 @@
                 </form>
                 <div>
                     <button onClick={props.save}>Save</button>
-                    <button onClick={props.reset}>Reset</button>
+                    <button onClick={props.reset}>Clear</button>
                     <button onClick={props.delete}>Delete</button>
                 </div>
             </div>

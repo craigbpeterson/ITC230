@@ -57,6 +57,7 @@ header p {
     float: left;
     background-color: #ccc;
     color: #142530;
+    max-width: 205px;
 }
 
 #item-details h3 {
@@ -65,14 +66,28 @@ header p {
 
 #item-details p {
     margin-top: 0;
-    font-size: .8rem;
+    font-size: 1rem;
     font-style: italic;
+}
+
+#item-details .headshotframe {
+    border: 10px solid #5d9741;
+    border-radius: 6px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 125px;
+    margin-bottom: 1rem;
+}
+
+#item-details .headshot {
+    display: block;
+    width: 125px;
 }
 
 #item-details input {
     margin-bottom: 1em;
     padding: .3em;
-    width: 90%;
+    /* width: 90%; */
     font-size: 1rem;
     border: 0;
     border-radius: 6px;
@@ -88,6 +103,10 @@ header p {
     color: #142530;
 }
 
+#item-details button:nth-of-type(3) {
+    margin-right: 0;
+}
+
 .noresults {
     padding: 1rem 1rem 0 1rem;
     margin: 0;
@@ -99,9 +118,15 @@ header p {
 @media all and (max-width:470px) {
     #item-details {
         float: none;
+        max-width:100%;
     }
     
     #item-list {
         float: left;
+    }
+    
+    #item-details .headshotframe {
+        margin-left: 0;
+        margin-right: 0;
     }
 }
